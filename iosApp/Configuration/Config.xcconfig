@@ -1,0 +1,7 @@
+TEAM_ID=
+
+PRODUCT_NAME=TechnologiaInternetowa
+PRODUCT_BUNDLE_IDENTIFIER=com.example.technologiainternetowa.TechnologiaInternetowa$(TEAM_ID)
+
+CURRENT_PROJECT_VERSION=1
+MARKETING_VERSION=1.0
