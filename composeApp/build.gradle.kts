@@ -39,23 +39,28 @@ kotlin {
         browser()
         binaries.executable()
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
+            implementation(project(":shared")) // TO JEST KLUCZOWE - tutaj shared musi być widoczne dla wszystkich platform
+
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
-            implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(compose.components.resources)
             implementation(compose.materialIconsExtended)
 
+            // Te dwie linijki poniżej są zdublowane z bibliotekami z toml (libs),
+            // możesz je zostawić lub usunąć jeśli masz je w libs.versions.toml
+            implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+            implementation("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -96,6 +101,7 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    implementation(project(":shared"))
 }
 
 compose.desktop {

@@ -1,6 +1,8 @@
 package com.example.technologiainternetowa.presentation.tramList
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,33 +29,18 @@ fun TramItem(
     onFavoriteClick: (String) -> Unit,
     onLineClick: (String) -> Unit
 ) {
-    // Stan widoczności paska (obsługuje hover na Desktopie i kliknięcie na Androidzie)
     var isVisible by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .width(320.dp)
             .padding(8.dp)
-            // Obsługa kliknięcia (ważne dla Androida, by pokazać pasek linii)
-            .clickable { isVisible = !isVisible }
-            // Obsługa najechania myszą (Desktop)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        when (event.type) {
-                            PointerEventType.Enter -> isVisible = true
-                            PointerEventType.Exit -> isVisible = false
-                        }
-                    }
-                }
-            },
+            .clickable { isVisible = !isVisible },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column {
-            // Box pozwala na nakładanie elementów na siebie [cite: 14]
-            Box( //
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -67,11 +54,8 @@ fun TramItem(
                     contentScale = ContentScale.Fit
                 )
 
-                // TO MUSI BYĆ TUTAJ - wewnątrz klamer Box
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = isVisible,
-                    modifier = Modifier.align(Alignment.BottomCenter) // Teraz na 100% zadziała
-                ) {
+                // USUNIĘTO PREFIKS I COLUMN SCOPE
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
@@ -90,7 +74,7 @@ fun TramItem(
 
                         tram.lines.forEach { line ->
                             Surface(
-                                color = Color(0xFFFFD700), // Żółty kolor tablic
+                                color = Color(0xFFFFD700),
                                 shape = RoundedCornerShape(4.dp),
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
@@ -108,10 +92,9 @@ fun TramItem(
                     }
                 }
 
-                // Przycisk ulubionych (gwiazdka) w prawym górnym rogu zdjęcia
                 IconButton(
                     onClick = { onFavoriteClick(tram.id) },
-                    modifier = Modifier.align(Alignment.TopEnd).padding(4.dp)
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(4.dp)
                 ) {
                     Icon(
                         imageVector = if (tram.favorite) Icons.Filled.Star else Icons.Outlined.Star,
@@ -121,11 +104,10 @@ fun TramItem(
                 }
             }
 
-            // Nazwa modelu pod zdjęciem
             Text(
                 text = tram.name,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
-}

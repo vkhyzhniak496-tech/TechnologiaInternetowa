@@ -1,6 +1,8 @@
 rootProject.name = "TechnologiaInternetowa"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
+include(":server")
+include(":composeApp")
+include(":shared")
 pluginManagement {
     repositories {
         google {
@@ -32,6 +34,5 @@ dependencyResolutionManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-}
 
-include(":composeApp")
+}
