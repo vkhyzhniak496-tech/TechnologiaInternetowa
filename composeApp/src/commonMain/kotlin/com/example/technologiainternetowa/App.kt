@@ -1,5 +1,4 @@
 package com.example.technologiainternetowa
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,22 +9,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.technologiainternetowa.TramViewModel
 // Importy Twoich plików:
-import com.example.technologiainternetowa.utils.openBrowser
-import com.example.technologiainternetowa.presentation.tramList.TramListViewModel
 import com.example.technologiainternetowa.presentation.tramList.TramItem
-import com.example.technologiainternetowa.data.dataSource.TramsLocalDataSource
-import com.example.technologiainternetowa.data.repository.TramsLocalRepository
-import com.example.technologiainternetowa.domain.useCase.GetAllTramsUseCase
-import com.example.technologiainternetowa.domain.useCase.ToggleFavoriteUseCase
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalUriHandler
 @Composable
 fun App() {
     MaterialTheme {
         // Używamy Twojego nowego ViewModelu, który sam ogarnia RemoteDataSource
         val viewModel = remember { TramViewModel() }
         val trams by viewModel.trams.collectAsState()
+        val uriHandler = LocalUriHandler.current
 
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -46,13 +40,15 @@ fun App() {
                     // Usunięto "count ="
                     items(trams) { tram ->
                         TramItem(
-                            tram = tram, // Tu już nie powinno być błędu
-                            onFavoriteClick = { /* ... */ },
-                            onLineClick = { line ->
-                                val url = "https://www.wtp.waw.pl/rozklady-jazdy/?wtp_dt=2026-04-27&wtp_md=3&wtp_ln=$line"
-                                openBrowser(url)
-                            }
-                        )
+                            tram = tram,
+                            onFavoriteClick = { id ->
+                                viewModel.toggleFavorite(id)
+                            },
+                        ) { line ->
+                            // 3. Po kliknięciu budujemy link ZTM i odpalamy przeglądarkę na telefonie!
+                            val url = "https://www.wtp.waw.pl/rozklady-jazdy/?wtp_md=3&wtp_ln=$line"
+                            uriHandler.openUri(url)
+                        }
                     }
                 }
             }

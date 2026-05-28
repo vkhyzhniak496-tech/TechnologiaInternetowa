@@ -47,7 +47,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(project(":shared")) // TO JEST KLUCZOWE - tutaj shared musi być widoczne dla wszystkich platform
-
+            implementation("media.kamel:kamel-image:1.0.2")
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)

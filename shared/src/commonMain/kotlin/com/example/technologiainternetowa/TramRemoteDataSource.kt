@@ -6,7 +6,8 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-
+import io.ktor.client.request.*
+import io.ktor.http.*
 class TramRemoteDataSource {
     private val client = HttpClient {
         install(ContentNegotiation) {
@@ -23,6 +24,19 @@ class TramRemoteDataSource {
         } catch (e: Exception) {
             e.printStackTrace()
             emptyList()
+        }
+    }
+
+
+
+    // ... wewnątrz klasy TramRemoteDataSource:
+    suspend fun toggleFavoriteOnServer(id: Int): Boolean {
+        return try {
+            val response = client.post("http://10.0.2.2:8080/trams/$id/favorite")
+            response.status == HttpStatusCode.OK
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
     }
 }

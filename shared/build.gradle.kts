@@ -26,6 +26,7 @@ kotlin {
 
                     // DODAJ TO (opcjonalnie, ale bardzo pomaga w debugowaniu):
                     implementation("io.ktor:ktor-client-logging:3.0.3")
+                    implementation("org.jetbrains.kotlin:kotlin-reflect")
                 }
             }
 
